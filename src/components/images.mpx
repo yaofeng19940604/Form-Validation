@@ -1,0 +1,120 @@
+<template>
+  <view>
+    <view class="image-list">
+      <view class="item" wx:for="{{images}}" wx:key="{{index}}">
+        <image src="{{item}}" data-index="{{index}}" bind:tap="onPreview"/>
+        <van-icon wx:if="{{editable}}" class="clear" data-index="{{index}}" name="clear" bind:tap="onClear" />
+      </view>
+    </view>
+    <view class="more" catchtap="onAddImages" wx:if="{{editable}}">+添加图片</view>
+  </view>
+</template>
+
+<script>
+  import mpx, { createComponent } from '@mpxjs/core'
+
+  createComponent({
+    options: {
+      addGlobalClass: true,
+    },
+    properties: {
+      value: Array,
+      editable: Boolean,
+    },
+    data: {
+      // TODO: 由于MPX中的Bug导致setData无法修改properties中的值，所以用了images。
+      images:[]
+    },
+    lifetimes: {
+      attached: function() {
+        this.setData({
+          images: this.data.value
+        })
+      }
+    },
+    methods: {
+      // 添加图片
+      onAddImages(ev) {
+        mpx.chooseImage({
+          sizeType: 'original',
+          sourceType: 'album'
+        }).then(res=>{
+          this.data.images.push(...res.tempFilePaths)
+          this.setData({
+            images: this.data.images
+          })
+        })
+      },
+
+      // 预览图片
+      onPreview(ev) {
+        let {index} = ev.target.dataset
+        wx.previewImage({
+          current: this.data.images[index], 
+          urls: this.data.images
+        })
+      },
+
+      // 删除图片
+      onClear(ev) {
+        let {index} = ev.target.dataset
+        this.data.images.splice(index, 1)
+        this.setData({
+          images: this.data.images
+        })
+      }
+    },
+
+    watch: {
+      images: function (newval, oldval) {
+        this.triggerEvent('change', newval)
+      },
+    }
+  })
+</script>
+
+
+<style lang="less">
+@import '../style/var.less';
+@import '../style/mixin.less';
+
+// 分栏数
+@collums: 3;
+
+.image-list {
+  display: flex;
+  flex-flow: row wrap;
+    
+  .item {
+    .row-split(@collums);
+    position: relative;
+
+    &:nth-child(@{collums}n){
+      .clear {
+        right: 0;
+      }
+    }
+
+    image {
+      .square(100%);
+    }
+
+    .clear {
+      font-size: 32rpx;
+      color: gray;
+      position: absolute;
+      top: @normal-padding;
+      right: @normal-padding;
+    }
+  }
+}
+</style>
+
+<script type="application/json">
+  {
+    "component": true,
+    "usingComponents": {
+      "van-icon": "vant-weapp/lib/icon"
+    }
+  }
+</script>

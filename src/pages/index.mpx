@@ -1,0 +1,23 @@
+<template>
+  <view>
+    <list></list>
+    <van-button plain hairline type="primary">细边框按钮</van-button>
+  </view>
+</template>
+
+<script>
+  import { createPage } from '@mpxjs/core'
+
+  createPage({
+    onLoad () {}
+  })
+</script>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "list": "../components/list",
+      "van-button": "vant-weapp/dist/button"
+    }
+  }
+</script>

@@ -1,0 +1,183 @@
+<template minapp='native' xlang='wxml'>
+  <view class="container">
+    <import src="template_goods_edit.wxml"></import>
+
+    <include src="../common/include_link_header_create.wxml" />
+    <van-cell-group title="团购商品列表">
+      <template is="goods-edit" wx:for="{{link.goods}}" wx:key="index" data="{{ goods:link.goods, validateResult,index }}"/>
+    </van-cell-group>
+    <view class="more" catchtap="addGoods">+添加更多商品</view>
+    <van-cell-group title="接龙设置">
+      <van-switch-cell
+        name="enable_express"
+        title="是否支持配送到家"
+        data-key="enable_express"
+        checked="{{link.enable_express}}"
+        bind:change="onChange"
+        border
+      />
+      <van-field
+        wx:for="{{link.delivery}}" wx:key="{{index}}"
+        label="提货点"
+        placeholder="请输入自提点"
+        icon="location"
+        data-key="delivery[{{index}}].address"
+        value="{{ link.delivery[index].address }}"
+        bind:change="onChange"
+        bind:click-icon="setLocation"
+        bind:focus="onLocationFocus"
+      ></van-field>
+    </van-cell-group>
+    <view class="more" catchtap="addLocation">+添加提货点</view>
+    <button type="primary" open-type="getUserInfo" style="margin-top:20rpx;" bindtap="onSubmit">发布接龙</button>
+  </view>
+</template>
+
+<script>
+import mpx from "@mpxjs/core";
+// import Notify from 'vant-weapp/notify/notify'
+import Validator from "../../../api/validator.js"
+const validator = new Validator()
+const validateList = {
+  title: [
+    { rule: 'required', message: '此处为必填项，请输入主题' },
+  ],
+  goodsName: [
+    { rule: 'required', message: '此处为必填项，请输入商品名称' },
+  ],
+  goodsPrice: [
+    { rule: 'required', message: '此处为必填项，请输入商品价钱' },
+  ],
+  goodsSpecification: [
+    { rule: 'required', message: '此处为必填项，请输入商品价钱' },
+  ],
+}
+Page({
+  data: {
+    link: {
+      title: '',
+      content: {},
+      goods: [{name: '西红柿', price: 300, specification: '500g'}],
+      enable_express: false,
+      delivery: [{},{}],
+    },
+    validateResult: {
+      title: "",
+      goods: [{name:"", price:"", specification:""}]
+    },
+  },
+
+  onChange(ev) {
+    let {key} = ev.target.dataset
+    this.setData({
+      ['link.'+key]: ev.detail
+    })
+    console.log('onChange',this.data.link)
+  },
+
+  onBlur(ev){
+    let { rule,key }= ev.target.dataset
+    // console.log(rule,key)
+    let val = ev.detail.value
+    let rules = validateList[rule]
+    let validate = validator.validateRules(val,rules)
+    // let message = ""
+    // if(!validate.result){
+    //   message = validate.message
+    // }
+    this.setData({
+      [`validateResult.${key}`]: validate.result ? null : validate.message
+    })
+    console.log('onBlur',this.data.validateResult);
+  },
+
+  addGoods(){
+    let linkGoods = this.data.link.goods;
+    let validateResultGoods = this.data.validateResult.goods;
+    let linkItem = {}
+    let validateResultItem = {}
+    linkGoods.push(linkItem);
+    validateResultGoods.push(validateResultItem);
+    this.setData({
+      'link.goods':linkGoods,
+      'validateresult.goods':validateResultGoods
+    })
+    // console.log('addGoods',this.data.validateResult)
+  },
+
+  onSubmit() {
+    console.log(this.data.link)
+    let images = this.data.link.content.images
+    if(!images){
+      return this.data.link
+    }
+    // 更新临时图片地址
+    for (let i = 0; i < images.length; i++) {
+      const item = images[i];
+      wx.cloud.uploadFile({
+        cloudPath: `temp/${i}.jpg`, // TODO: 设置目录路径
+        filePath: item
+      }).then((res) => {
+        // console.log(res)
+        images[i]=res.fileID
+      })
+    }
+
+    this.setData({
+      'link.content.images': this.data.link.content.images
+    })
+
+  },
+
+  onShow() {
+    // 所在页面显示之后就会执行一
+    console.log("page show");
+    console.log('onShow',this.data.validateResult);
+  },
+  onHide() {
+    // 页面切入后台执行
+    console.log("page hide");
+  },
+  methods: {
+    onSubmit() {
+      console.log(this.data.link)
+    },
+    /**
+     * 页面相关事件处理函数--监听用户下拉动作
+     */
+    onPullDownRefresh() {},
+    /**
+     * 页面上拉触底事件的处理函数
+     */
+    onReachBottom() {},
+    /**
+     * 用户点击右上角分享
+     */
+    onShareAppMessage() {}
+  }
+});
+</script>
+
+<style>
+@import url('../common/include_link_header.wxss');
+
+.goods-item {
+  margin-top: 10rpx;
+}
+
+</style>
+
+<script  type='application/json' lang='json'>
+{
+  "navigationBarTitleText": "创建团购活动",
+  "usingComponents": {
+    "em-images": "../../../components/images",
+    "van-cell": "vant-weapp/lib/cell",
+    "van-cell-group": "vant-weapp/lib/cell-group",
+    "van-field": "vant-weapp/lib/field",
+    "van-switch-cell": "vant-weapp/lib/switch-cell",
+    "van-notify": "vant-weapp/lib/notify"
+  }
+}
+</script>
+

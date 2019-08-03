@@ -1,0 +1,74 @@
+<template>
+  <view class="container">
+    <include src="../common/include_link_header_show.wxml" />
+    <!-- 商品列表 -->
+
+    <van-cell-group title="收货信息" >
+      <!-- 选择收货地址 -->
+      <!-- <van-cell wx:if="{{!follow.address}}" icon="logistics" title="选择收货地址" url="/pages/me/address/index?p=follow.address" is-link center clickable/>
+      <van-cell wx:else icon="logistics" title="{{follow.address.name}} {{follow.address.tel}}" label="{{follow.address.address}} " url="/pages/me/address/index?p=follow.address" is-link border center clickable/> -->
+      <!-- 自提点 -->
+      <van-cell wx:if="{{true}}" icon="location" title="自提点" bind:click="onLocation" is-link center clickable/>
+      <!-- 留言 -->
+      <van-field left-icon="chat-o" label="留言" placeholder="给发起人留言" value="{{follow.message}}" bind:change="onMessageChange" title-width="90rpx" center/>
+    </van-cell-group>
+
+    <van-cell-group title="已接龙用户" >
+      <!-- 发起人 -->
+
+      <!-- 接龙用户列表 -->
+    </van-cell-group>
+
+  </view>
+
+    <van-goods-action>
+      <van-goods-action-icon icon="shop-o" text="管理" />
+      <van-goods-action-icon icon="service-o" text="客服" />
+      <van-goods-action-button text="参与团购活动" />
+    </van-goods-action>
+  </view>
+</template>
+
+<script>
+  import mpx, { createPage } from '@mpxjs/core'
+  import link from '../../../api/link.js'
+
+  Page({
+    data: {
+      link:{}
+    },
+    onLoad (options) {
+      link.fetch(1).then(res=>{
+        console.log(this, res)
+        this.setData({
+          link: res
+        })
+
+        console.log(this.data.link)
+      })
+    }
+  })
+</script>
+
+<style>
+@import url('../common/include_link_header.wxss');
+
+.goods-item {
+  margin-top: 10rpx;
+}
+
+</style>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "em-images": "../../../components/images",
+      "van-cell-group": "vant-weapp/lib/cell-group",
+      "van-cell": "vant-weapp/lib/cell",
+      "van-field": "vant-weapp/lib/field",
+      "van-goods-action": "vant-weapp/dist/goods-action",
+      "van-goods-action-icon": "vant-weapp/dist/goods-action-icon",
+      "van-goods-action-button": "vant-weapp/dist/goods-action-button"
+    }
+  }
+</script>

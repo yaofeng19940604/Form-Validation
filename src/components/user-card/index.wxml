@@ -1,0 +1,9 @@
+<!--components/user-card/index.wxml-->
+<view class="userinfo">
+  <van-icon wx:if="{{showSetting}}" name="setting" class="setting" bind:click="onSettingTap"/>
+  <!-- <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo"> 获取头像昵称 </button> -->
+  <!-- <block wx:else> -->
+    <view class="avatar" bindtap="onAvatarTap"><open-data type="userAvatarUrl"/></view>
+    <open-data type="userNickName" class="nickname bold"></open-data>
+  <!-- </block> -->
+</view>

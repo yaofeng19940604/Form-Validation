@@ -1,0 +1,10 @@
+.small-icon {
+  width: 100rpx;
+  height: 100rpx;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.userinfo .van-cell {
+  background: transparent;
+}

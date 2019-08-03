@@ -1,0 +1,15 @@
+<template name="goods-edit">
+  <van-cell-group custom-class="goods-item">
+    <van-field label="商品{{index+1}}" placeholder="商品名称" confirm-type="next" value="{{goods[index].name}}"
+      data-key="goods[{{index}}].name" data-rule="goodsName"
+      required="{{validateResult.goods[index].name}}"
+      error-message="{{validateResult.goods[index].name}}" bind:change="onChange" bind:blur="onBlur"/>
+    <van-field label="规格" placeholder="每份5斤" confirm-type="next" value="{{goods[index].specification}}"
+    data-key="goods[{{index}}].specification" data-rule="goodsPrice" 
+    required="{{validateResult.goods[index].specification}}" error-message="{{validateResult.goods[index].specification}}"
+    bind:change="onChange" bind:blur="onBlur"/>
+    <van-field label="价格" placeholder="每份价格" confirm-type="next" type="digit"
+      value="{{goods[index].price || '' }}" data-key="goods[{{index}}].price" data-rule="goodsPrice"
+      required="{{validateResult.goods[index].price}}" error-message="{{validateResult.goods[index].price}}" bind:change="onChange" bind:blur="onBlur"/>
+  </van-cell-group>
+</template>

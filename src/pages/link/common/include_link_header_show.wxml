@@ -1,0 +1,19 @@
+<!-- 用户信息 -->
+<van-cell-group border="{{false}}" custom-class="userinfo">
+  <van-cell style="background: transparent;">
+    <view slot="icon" class="small-icon" style="margin-right: 10px;">
+      <open-data type="userAvatarUrl"></open-data>
+    </view>
+    <view slot="title">
+      <open-data type="userNickName"></open-data>
+      <view type="danger">8-15</view>
+    </view>
+  </van-cell>
+</van-cell-group>
+
+<!-- 标题和内容 -->
+<view class="title">{{link.title}}</view>
+<text wx:if="{{link.purchase.content}}">{{link.purchase.content}}</text>
+
+<!-- 图片 -->
+<em-images value="{{link.content.images}}"/>

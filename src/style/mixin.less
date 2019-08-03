@@ -1,0 +1,18 @@
+.size(@w, @h) {
+    width: @w;
+    height: @h;
+}
+
+.square(@s) {
+    .size(@s, @s);
+}
+
+.row-split(@num:3) {
+    .square((750rpx - @container-padding * 2 - @normal-padding*(@num - 1)) / @num);
+    padding: @normal-padding @normal-padding 0 0;
+    position: relative;
+
+    &:nth-child(@{num}n){
+      padding-right: 0;
+    }
+}

@@ -1,0 +1,21 @@
+<!-- 用户信息 -->
+<van-cell-group border="{{false}}" custom-class="userinfo">
+  <van-cell style="background: transparent;">
+    <view slot="icon" class="small-icon" style="margin-right: 10px;">
+      <open-data type="userAvatarUrl"></open-data>
+    </view>
+    <view slot="title">
+      <open-data type="userNickName"></open-data>
+      <view type="danger">8-15</view>
+    </view>
+  </van-cell>
+</van-cell-group>
+
+<!-- 标题和内容 -->
+<van-cell-group border="{{false}}">
+  <van-field name="title" placeholder="接龙主题" required="{{ validateResult.title }}" error-message="{{validateResult.title}}"  data-key="title" data-rule="title" value="{{link.title}}" bind:change="onChange" bind:blur="onBlur"/>
+  <van-field type="textarea" placeholder="说两句，让大家更积极的参与您的接龙。" border="{{false}}" data-key="content.text" value="{{link.content.text}}"autosize bind:change="onChange" />
+</van-cell-group>
+
+<!-- 图片 -->
+<em-images value="{{[]}}" editable data-key="content.images" bind:change="onChange"/>

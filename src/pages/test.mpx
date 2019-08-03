@@ -1,0 +1,53 @@
+<template>
+  <view class="container">
+    <!-- 头部 -->
+    <view class="head gap-bottom">
+      <!-- 用户头像 -->
+      <em-user-card />
+      <official-account></official-account>
+    </view>
+
+    <van-cell-group>
+      <van-cell title="无授权登录" bind:click="onLogin" clickable is-link />
+      <button class="button-reset" open-type="getUserInfo" bindgetuserinfo="onLoginAuth">
+        <van-cell title="授权登录" is-link />
+      </button>
+      <van-cell title="获取用户" bind:click="onGetUser" clickable is-link />
+      <van-cell title="收货地址" url="/pages/user/address/index/index" clickable is-link />
+    </van-cell-group>
+  </view>
+</template>
+
+<script>
+import { createPage } from "@mpxjs/core";
+import user from '../api/user';
+
+createPage({
+  onLoad() {},
+
+  onLogin() {
+    user.login()
+    // .then(console.log)
+  },
+
+  onLoginAuth() {
+    user.loginAuth()
+    .then(console.log)
+  },
+
+  onGetUser() {
+    user.getUser()
+    .then(console.log)
+  },
+});
+</script>
+
+<script type="application/json">
+  {
+    "usingComponents": {
+      "van-button": "vant-weapp/dist/button",
+      "van-cell": "vant-weapp/dist/cell",
+      "van-cell-group": "vant-weapp/dist/cell-group"
+    }
+  }
+</script>
